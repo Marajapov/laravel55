@@ -22,7 +22,6 @@ class FrontController extends Controller
 
       $data = array(
           'flats'  => $flats,
-          'title' => $this->title,
           'all_cities' => $this->all_cities,
           'popular' => $this->popular,
       );
@@ -53,7 +52,6 @@ class FrontController extends Controller
         $flats = $query->get();
         $data = array(
             'flats'  => $flats,
-            'title' => $this->title,
             'all_cities' => $this->all_cities,
             'popular' => $this->popular,
         );
@@ -63,7 +61,6 @@ class FrontController extends Controller
         $flats = Flat::orderBy('id','desc')->get();
         $data = array(
             'flats'  => $flats,
-            'title' => $this->title,
             'all_cities' => $this->all_cities,
             'popular' => $this->popular,
         );
@@ -71,5 +68,17 @@ class FrontController extends Controller
 
       }
 
+    }
+
+    // Detail
+    public function detail($id)
+    {
+      $row = Flat::find($id);
+      $data = array(
+          'row'  => $row,
+          'all_cities' => $this->all_cities,
+          'popular' => $this->popular,
+      );
+      return view('detail')->with($data);
     }
 }

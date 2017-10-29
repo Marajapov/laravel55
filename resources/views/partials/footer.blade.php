@@ -27,6 +27,12 @@
   <script>
   $(document).ready(function() {
     $('select').material_select();
+    $('.carousel').carousel({
+      fullWidth: true,
+      indicators: true
+    });
+
+    $('.carousel.carousel-slider').carousel({fullWidth:true});
   });
   </script>
   @endsection

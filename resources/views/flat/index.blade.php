@@ -36,12 +36,12 @@
                         <td>{{ $flat->getName() }}</td>
                         <td>{{ $flat->getPhone() }}</td>
                         <td>{{ $flat->getStreet() }}</td>
-                        <td><img src='{{asset("flats/main_img_tiny/")}}/{{$flat->main_img}}' width="100"></td>
+                        <td><img src='{{asset("flats/main_img_tiny/")}}/{{$flat->main_img}}' width="100" class="img-responsive"></td>
                         <td>{{ $flat->created_at->toDayDateTimeString() }}</td>
                         <td>
                             <a class="btn btn-default" href="{{ route('flat.show', $flat)}}">Show</a>
                             <a class="btn btn-warning" href="{{ route('flat.edit', $flat)}}">Edit</a>
-                            <a class="btn btn-info" href="{{ route('gallery.index', $flat)}}">Galleries</a>
+                            <a class="btn btn-info" href="{{ route('galleryIndex', $flat)}}">Galleries</a>
                             <button type="button" class="btn btn-danger" onclick="return confirm('Are you sure?')?deleteFlat({{ $flat->getId()}}):'';">Delete</button>
                         </td>
                       </tr>

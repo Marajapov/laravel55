@@ -19,7 +19,7 @@
             <!-- Website Overview -->
             <div class="panel panel-default">
               <div class="panel-heading main-color-bg">
-                <h3 class="panel-title">Laravel</h3>
+                <h3 class="panel-title">Laravel 5 5</h3>
               </div>
             </div>
 

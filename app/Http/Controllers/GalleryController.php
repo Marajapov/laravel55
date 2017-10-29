@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
+use Request;
+use Illuminate\Support\Facades\Input;
+use App\Http\Requests;
+
 use App\Flat as Flat;
 use App\Gallery as Gallery;
 
@@ -13,12 +17,13 @@ class GalleryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $id) // flat ID
+    public function galleryIndex(Request $request, $id) // flat ID
     {
-        $flat = Flat::find($id);
+        $flat = Flat::where('id',$id)->first();
         $galleries = Gallery::where('flat_id','=',$id)->get();
         return view('gallery.index',[
             'galleries'=>$galleries,
+            'flat' => $flat
             ]);
     }
 
@@ -38,9 +43,19 @@ class GalleryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(\Illuminate\Http\Request $request)
     {
-        dd('here');
+        $name = $request->input('name');
+        $description = $request->input('description');
+        $flat_id = $request->input('flat_id');
+        $gallery = new Gallery();
+        $gallery->owner_id = \Auth::user()->id;
+        $gallery->flat_id = $flat_id;
+        $gallery->name = $name;
+        $gallery->description = $description;
+        $gallery->save();
+        return redirect()->route('galleryIndex', ['id' => $flat_id]);
+
     }
 
     /**
@@ -51,7 +66,8 @@ class GalleryController extends Controller
      */
     public function show($id)
     {
-        //
+        $gallery = Gallery::find($id);
+        return view('gallery.show',['gallery'=>$gallery]);
     }
 
     /**
@@ -62,7 +78,8 @@ class GalleryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $gallery = Gallery::find($id);
+        return view('gallery.edit',['gallery'=>$gallery]);
     }
 
     /**
@@ -72,9 +89,13 @@ class GalleryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateGallery(\Illuminate\Http\Request $request, $id)
     {
-        //
+        $gallery = Gallery::find($id);
+        $gallery->name = $request->input('name');
+        $gallery->description = $request->input('description');
+        $gallery->save();
+        return redirect()->route('galleryIndex', ['id' => $gallery->flat_id]);
     }
 
     /**
@@ -83,8 +104,13 @@ class GalleryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deleteGallery()
     {
-        //
+      if(Request::ajax()) {
+          $data = Input::all();
+          $gallery = Gallery::find($data['id']);
+          $gallery->delete();
+          $gallery = Gallery::get();
+      }
     }
 }

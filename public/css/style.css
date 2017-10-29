@@ -1,15 +1,15 @@
 body{
   font: 15px/1.5 Arial, Helvetica,sans-serif;
-  padding:0;
-  margin:0;
-  background-color:#f4f4f4;
+  padding: 0;
+  margin: 0;
+  background-color: #f4f4f4;
 }
 
 /* Global */
 .container{
-  width:80%;
-  margin:auto;
-  overflow:hidden;
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
 }
 
 ul{
@@ -108,7 +108,7 @@ header a:hover{
   font-size: 1.5em;
   -webkit-margin-before: 0.83em;
   -webkit-margin-after: 0.83em;
-  
+
   -webkit-margin-start: 0px;
   -webkit-margin-end: 0px;
   font-weight: bold;

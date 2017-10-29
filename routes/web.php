@@ -1,7 +1,7 @@
 <?php
 
 Route::get('/', 'FrontController@index')->name('index');
-
+Route::get('/detail/{id}', 'FrontController@detail')->name('detail');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -25,9 +25,16 @@ Route::prefix('flat')->middleware('auth:web')->group(function() {
 // Gallery
 Route::prefix('gallery')->middleware('auth:web')->group(function() {
     Route::get('/', 'GalleryController@index')->name('gallery.index');
-    Route::post('/delete', 'GalleryController@delete')->name('gallery.delete');
-
-
+    Route::get('/galleryIndex/{id}', 'GalleryController@galleryIndex')->name('galleryIndex');
+    Route::post('/delete', 'GalleryController@deleteGallery')->name('gallery.delete');
+    Route::post('/{id}', 'GalleryController@updateGallery')->name('updateGallery');
+});
+// Photos
+Route::prefix('photo')->middleware('auth:web')->group(function() {
+    Route::get('/', 'PhotoController@index')->name('photo.index');
+    Route::get('/photoIndex/{id}', 'PhotoController@photoIndex')->name('photoIndex');
+    Route::post('/delete', 'PhotoController@deletePhoto')->name('photo.delete');
+    Route::post('/{id}', 'PhotoController@updatePhoto')->name('updatePhoto');
 });
 // Cities
 Route::prefix('city')->middleware('auth:web')->group(function() {

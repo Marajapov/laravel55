@@ -3,7 +3,7 @@
 <meta name="_token" content="{{ csrf_token() }}"/>
 @endsection
 @section('content')
-    @component('components.galleryDashboard')
+    @component('components.photoDashboard')
     @endcomponent
 
     <section id="main">
@@ -13,7 +13,7 @@
             <!-- Website Overview -->
             <div class="panel panel-default">
               <div class="panel-heading main-color-bg">
-                <h3 class="panel-title">Galleries of "{{ $flat->getName() }}" <a href="{{ url()->previous() }}" class="pull-right">Back</a></h3>
+                <h3 class="panel-title">Photos of "{{ $gallery->getName() }}"<a href="{{ url()->previous() }}" class="pull-right">Back</a></h3>
               </div>
               <div class="panel-body">
                 <div class="row">
@@ -24,21 +24,17 @@
                 <br>
                 <table id="table" class="table table-striped table-hover">
                       <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Date created</th>
+                        <th>Image</th>
                         <th>Action</th>
                       </tr>
-                      @foreach($galleries as $gallery)
+                      @foreach($photos as $photo)
                       <tr>
-                        <td>{{ $gallery->getName() }}</td>
-                        <td>{{ $gallery->getDescription() }}</td>
-                        <td>{{ $gallery->created_at->toDayDateTimeString() }}</td>
                         <td>
-                            <a class="btn btn-default" href="{{ route('gallery.show', $gallery)}}">Show</a>
-                            <a class="btn btn-warning" href="{{ route('gallery.edit', $gallery)}}">edit</a>
-                            <a class="btn btn-info" href="{{ route('photoIndex', $gallery)}}">Photos</a>
-                            <button type="button" class="btn btn-danger" onclick="return confirm('Are you sure?')?deleteItem({{ $gallery->getId()}}):'';">Delete</button>
+                          <img src="{{ asset('photos/main_img_tiny')}}/{{ $photo->getImage() }}" width="100" alt="{{ $photo->getImage() }}" class="img-responsive">
+                        </td>
+                        <td>
+                            <a class="btn btn-default" href="{{ route('photo.show', $photo)}}">Show</a>
+                            <button type="button" class="btn btn-danger" onclick="return confirm('Are you sure?')?deleteItem({{ $photo->getId()}}):'';">Delete</button>
                         </td>
                       </tr>
                       @endforeach
@@ -51,7 +47,7 @@
     </section>
 
     <!-- Modals -->
-    @component('components.galleryModal',['flat_id'=>$flat->getId()])
+    @component('components.photoModal',['gallery_id'=>$gallery->getId()])
     @endcomponent
 
 @endsection
@@ -61,7 +57,7 @@
   function deleteItem(id)
   {
       var dataString = 'id=' + id;
-      var url = "{{ route('gallery.delete') }}";
+      var url = "{{ route('photo.delete') }}";
       $.ajaxSetup({
           headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}
       });

@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Request;
+use Illuminate\Support\Facades\Input;
+use App\Http\Requests;
+
+use App\Photo as Photo;
+use App\Gallery as Gallery;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class PhotoController extends Controller
 {
@@ -11,9 +17,14 @@ class PhotoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function photoIndex(Request $request, $id)
     {
-        //
+      $gallery = Gallery::where('id',$id)->first();
+      $photos = Photo::where('gallery_id','=',$id)->get();
+      return view('photo.index',[
+          'gallery'=> $gallery,
+          'photos' => $photos
+          ]);
     }
 
     /**
@@ -32,11 +43,23 @@ class PhotoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(\App\Http\Requests\UploadRequest $request)
     {
-        //
-    }
+        $gallery_id = $request->input('gallery_id');
+        foreach ($request->photos as $image) {
+            $input['imagename'] = rand(1,1002).time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('photos/main_img');
+            $destinationPathTiny = public_path('photos/main_img_tiny');
+            $newImage = $image->move($destinationPath,$input['imagename']);
+            $result = Image::make($newImage)->fit(250,150)->save($destinationPathTiny.'/'.$input['imagename']);
+            $photo = new Photo();
+            $photo->gallery_id = $gallery_id;
+            $photo->image = $input['imagename'];
+            $photo->save();
+        }
+        return redirect()->route('photoIndex', ['id' => $request->input('gallery_id')]);
 
+    }
     /**
      * Display the specified resource.
      *
@@ -77,8 +100,19 @@ class PhotoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deletePhoto()
     {
-        //
+      if(Request::ajax()) {
+        $data = Input::all();
+        $photo = Photo::find($data['id']);
+        $destinationPath = public_path('photos/main_img');
+        $destinationPathTiny = public_path('photos/main_img_tiny');
+        if(file_exists($destinationPath.'/'.$photo->getImage())){
+            @unlink($destinationPath.'/'.$photo->getImage());
+            @unlink($destinationPathTiny.'/'.$photo->getImage());
+        }
+        $photo->delete();
+        $photos = Photo::get();
+      }
     }
 }

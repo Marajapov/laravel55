@@ -1,12 +1,10 @@
 @extends('layouts.master')
-
+@section('title','С У Т К И : База объявлений гостиничнего бизнеса')
 @section('content')
-
 @include('partials.header')
 @include('partials.search')
 <div class="section">
   <div class="row">
-
     <div class="col s9">
       <!-- Promo Content 1 goes here -->
       <h5>Последние объявления</h5>
@@ -17,7 +15,7 @@
             <div class="card-image">
               <img src="{{asset("flats/main_img/")}}/{{$row->main_img}}">
               <span class="card-title">{{ $row->getName() }}</span>
-              <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+              <a href="{{ route('detail',$row)}}" class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">open_in_new</i></a>
             </div>
             <div class="card-content">
               <?php echo substr($row->description, 0,30);?>...
